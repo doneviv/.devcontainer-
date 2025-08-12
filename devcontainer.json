@@ -1,12 +1,44 @@
 {
-  "name": "My Project Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-  "features": {},
+  "name": "PrioritizationTool \u2013 .NET 8 + SQL Server",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "features": {
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "8.0"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "forwardPorts": [
+    5000,
+    5001,
+    1433
+  ],
+  "portsAttributes": {
+    "5001": {
+      "label": "Blazor (HTTPS)"
+    },
+    "5000": {
+      "label": "Blazor (HTTP)"
+    },
+    "1433": {
+      "label": "SQL Server"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteEnv": {
+    "ASPNETCORE_URLS": "https://0.0.0.0:5001;http://0.0.0.0:5000",
+    "ConnectionStrings__DefaultConnection": "Server=db;Database=PrioritizationTool;User Id=sa;Password=${env:MSSQL_SA_PASSWORD};TrustServerCertificate=True"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
+        "ms-dotnettools.csharp",
         "ms-azuretools.vscode-docker",
-        "ms-python.python"
+        "ms-mssql.mssql",
+        "ms-vscode.vscode-typescript-next"
       ]
     }
   }
